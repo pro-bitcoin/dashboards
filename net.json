@@ -1,0 +1,1574 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 6,
+  "iteration": 1634246082300,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 20,
+        "w": 16,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "links": [
+        {
+          "title": "block format",
+          "url": "https://btcinformation.org/en/developer-reference#block-chain"
+        }
+      ],
+      "options": {
+        "content": "# Net Metrics\n\n## [Peer Discovery](https://developer.bitcoin.org/devguide/p2p_network.html#peer-discovery)\n\nWhen started for the first time, programs don’t know the IP addresses of any active full nodes. In order to discover some IP addresses, they query one or more DNS names (called [DNS seeds](https://developer.bitcoin.org/glossary.html#term-DNS-seed)) hardcoded into Bitcoin Core and BitcoinJ.\n\n---\n## Protocols Supported\n\n  * Ipv4\n  * Ipv6\n  * [Tor](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/tor.md)\n  * [I2P](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/i2p.md)\n\n---\n\n## Service Connection Types\n  * [SPV](https://btcinformation.org/en/developer-guide#simplified-payment-verification-spv) - Thin Client\n  * [FULL](https://btcinformation.org/en/developer-guide#full-node)\n\n---\n## CConman\n  Class [CConnman](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/net.h) handles all connections and coordinates messages to/from other nodes, which is named [CNode](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.h#L396)\n  \n   CConnman has multiple threads handling various tasks\n           \n  * ThreadOpenAddedConnections\n  * ThreadMessageHandler\n  * ThreadI2PAcceptIncoming\n  * ThreadDNSAddressSeed\n  * ThreadSocketHandler\n\n  [CConnman::SocketHandler](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#1634) handles low level sockets operations (sending/recv) from the CNodes\n\n  CConnman is initialized in [src/init.cpp](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/init.cpp#L1185)\n\n  ---\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.1.6",
+      "title": "Net",
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 13,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 35,
+      "options": {
+        "folderId": 1,
+        "maxItems": 10,
+        "query": "",
+        "showHeadings": false,
+        "showRecentlyViewed": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": []
+      },
+      "pluginVersion": "8.1.6",
+      "title": "Dashboards",
+      "transparent": true,
+      "type": "dashlist"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 25,
+      "panels": [],
+      "title": "Chain: ${chain}",
+      "type": "row"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 21
+      },
+      "id": 29,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "time() - bitcoin_boot_time{chain=\"$chain\", host=\"$host\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Uptime",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Total bandwidth received as defined in CConnman::RecordBytesRecv",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 3,
+        "y": 21
+      },
+      "id": 21,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CConnman::RecordBytesRecv",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3003"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(net_bandwidth{chain=\"$chain\", host=\"$host\", type=\"total\", direction=\"rx\"})",
+          "interval": "",
+          "legendFormat": "total",
+          "refId": "A"
+        }
+      ],
+      "title": "RX Total",
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Total transmitted bytes as defined in  CConnman::RecordBytesSent",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-red",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 6,
+        "y": 21
+      },
+      "id": 23,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CConnman::RecordBytesSent",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3010"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(net_bandwidth{chain=\"$chain\", host=\"$host\", type=\"total\", direction=\"tx\"})",
+          "interval": "",
+          "legendFormat": "total",
+          "refId": "A"
+        }
+      ],
+      "title": "TX Total",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "value of  -maxuploadtarget\n\n**Zero** implies no limit",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 9,
+        "y": 21
+      },
+      "id": 12,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "reduce-traffic.md",
+          "url": "https://github.com/bitcoin/bitcoin/blob/master/doc/reduce-traffic.md"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 4
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "bitcoin_conf{chain=\"$chain\", host=\"$host\", name=\"maxuploadtarget\", type=\"bytes\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Max Upload Target",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "The amount of time left in a 24 hour period to reset the max upload target",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "index": 0,
+                  "text": "0"
+                },
+                "to": -9000000
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 21
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "titleSize": 4
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(86400 - (time() - scalar(net_max_outbound{chain=\"$chain\", host=\"$host\", type=\"epoch\"}))) ",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Target Cycle Time Left",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Percentage of data used from `-maxuploadtarget`",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "max": 100,
+          "min": 0.1,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 75
+              },
+              {
+                "color": "light-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 15,
+        "y": 21
+      },
+      "id": 13,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "bitcoin_conf{chain=\"$chain\", host=\"$host\", name=\"maxuploadtarget\"}",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_max_outbound{chain=\"$chain\", host=\"$host\", type=\"bytes\"}",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "100-(((bitcoin_conf{chain=\"$chain\", host=\"$host\", name=\"maxuploadtarget\"} - scalar(net_max_outbound{chain=\"$chain\", host=\"$host\", type=\"bytes\"}))/bitcoin_conf{chain=\"$chain\", host=\"$host\", name=\"maxuploadtarget\"} > 0)*100)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Used Upload Target",
+      "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 75
+              },
+              {
+                "color": "light-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 21
+      },
+      "id": 26,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "scalar(net_connection{chain=\"$chain\",host=\"$host\", mtype=\"gauge\",type=\"total\"})/ scalar(bitcoin_conf{chain=\"$chain\",host=\"$host\", mtype=\"gauge\",name=\"maxconnections\",type=\"int\"})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Connections Used Pct",
+      "type": "bargauge"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "description": "Number of protocol connections as defined in CConnman::NotifyNumConnectionsChanged",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 23,
+        "x": 0,
+        "y": 25
+      },
+      "hiddenSeries": false,
+      "id": 10,
+      "legend": {
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CConnman::NotifyNumConnectionsChanged",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L1301"
+        }
+      ],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.6",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:184",
+          "alias": "max",
+          "fill": 0,
+          "linewidth": 5
+        },
+        {
+          "$$hashKey": "object:318",
+          "alias": "total",
+          "dashes": true,
+          "fill": 0,
+          "spaceLength": 3
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "net_connection{chain=\"$chain\", host=\"$host\", type=\"ipv4\", mtype=\"gauge\"}",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_connection{chain=\"$chain\",host=\"$host\",type=\"ipv6\", mtype=\"gauge\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_connection{chain=\"$chain\",host=\"$host\",type=\"tor\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_connection{chain=\"$chain\",host=\"$host\",type=\"i2p\"}",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "i2p",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "scalar(bitcoin_conf{chain=\"$chain\",host=\"$host\", mtype=\"gauge\",name=\"maxconnections\",type=\"int\"})",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "max",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_connection{chain=\"$chain\",host=\"$host\",type=\"total\"}",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "total",
+          "refId": "F"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Protocol Connections",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:62",
+          "format": "short",
+          "label": null,
+          "logBase": 2,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:63",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "SPV and FULL nodes as a percentage of total connections as defined in Connman::NotifyNumConnectionsChanged\nAny connection that is not SPV is a FULL connection\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 0,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "percent"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "light-orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "spv"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "full"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 23,
+        "x": 0,
+        "y": 37
+      },
+      "id": 27,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "SPV",
+          "url": "https://btcinformation.org/en/developer-guide#simplified-payment-verification-spv"
+        },
+        {
+          "targetBlank": true,
+          "title": "full",
+          "url": "https://btcinformation.org/en/developer-guide#full-node"
+        },
+        {
+          "targetBlank": true,
+          "title": "CConnman::NotifyNumConnectionsChanged",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L1301\n"
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.1.4",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "scalar(net_connection{chain=\"$chain\", host=\"$host\", type=\"spv\", mtype=\"gauge\"})/scalar(net_connection{chain=\"$chain\", host=\"$host\", mtype=\"gauge\",type=\"total\"})",
+          "interval": "",
+          "legendFormat": "spv",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "scalar(net_connection{chain=\"$chain\", host=\"$host\", type=\"full\", mtype=\"gauge\"})/scalar(net_connection{chain=\"$chain\", host=\"$host\", mtype=\"gauge\",type=\"total\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "full",
+          "refId": "B"
+        }
+      ],
+      "title": "Full/SPV Connections",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 6,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tx"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "block"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 23,
+        "x": 0,
+        "y": 49
+      },
+      "id": 4,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CConnman::RecordBytesSent",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3010\n"
+        },
+        {
+          "title": "CConnman:::RecordBytesRecv",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3010\n"
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"rx\", type=\"total\"}[1m])",
+          "interval": "",
+          "legendFormat": "{{direction}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"tx\", type=\"total\"}[1m])*-1",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{direction}}",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "idelta(block_tip{chain=\"$chain\", host=\"$host\", type=\"time\"}[1m]) % 600",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "block",
+          "refId": "C"
+        }
+      ],
+      "title": "Bandwidth Rate",
+      "type": "timeseries"
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 23,
+        "x": 0,
+        "y": 60
+      },
+      "hiddenSeries": false,
+      "id": 31,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.6",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:49",
+          "alias": "tx",
+          "color": "#FF7383",
+          "transform": "negative-Y"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "increase(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"rx\", type=\"total\"}[60m])",
+          "interval": "60m",
+          "legendFormat": "rx",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "increase(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"tx\", type=\"total\"}[60m])",
+          "hide": false,
+          "interval": "60m",
+          "legendFormat": "tx",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Bandwidth Per Hour",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transformations": [],
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:148",
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:149",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "datasource": null,
+      "description": "Amount of bandwidth per message excluding block messages",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 70
+      },
+      "id": 32,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "p2p",
+          "url": "https://developer.bitcoin.org/reference/p2p_networking.html"
+        },
+        {
+          "targetBlank": true,
+          "title": "CConnman::PushMessage",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3165"
+        }
+      ],
+      "options": {
+        "displayLabels": [],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((sum by (type) (net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"tx\", type !~\"block|total\"} > 0))/ (scalar(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"tx\", type=\"total\"}) - scalar(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"tx\", type=\"block\"}) )) * 100 > 0.5",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Bandwidth By Messages Sent",
+      "type": "piechart"
+    },
+    {
+      "datasource": null,
+      "description": "Excluding getdata message",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 11,
+        "x": 12,
+        "y": 70
+      },
+      "id": 33,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CNode::ReceiveMsgByte",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L530"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value"
+          ]
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "((sum by (type) (net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"rx\", type !~\"getdata|total\"} > 0))/ (scalar(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"rx\", type=\"total\"}) - scalar(net_bandwidth{chain=\"$chain\", host=\"$host\", direction=\"rx\", type=\"getdata\"}) )) * 100 > 0.5",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Bandwidth  By Messages Receive",
+      "type": "piechart"
+    },
+    {
+      "datasource": "${datasource}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 23,
+        "x": 0,
+        "y": 86
+      },
+      "id": 6,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": " CNode::CloseSocketDisconnect",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L500"
+        },
+        {
+          "targetBlank": true,
+          "title": "CConnman::CreateNodeFromAcceptedSocket",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#1123"
+        },
+        {
+          "targetBlank": true,
+          "title": " CConnman::OpenNetworkConnection",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L2320"
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(net_socket{chain=\"$chain\", host=\"$host\"}[30s])",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Sockets Accept/Close/Open",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "Time for a NetMsgType::PING NetMsgType::PONG message",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "90th"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 23,
+        "x": 0,
+        "y": 96
+      },
+      "id": 8,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "NetMsgType::PONG",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net_processing.cpp#L3815"
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "net_ping{chain=\"$chain\",host=\"$host\", quantile=\"0.5\"}",
+          "interval": "",
+          "legendFormat": "avg",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "net_ping{chain=\"$chain\",host=\"$host\", quantile=\"0.9\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "90th",
+          "refId": "C"
+        }
+      ],
+      "title": "Ping",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "btc",
+          "value": "btc"
+        },
+        "datasource": "${datasource}",
+        "definition": "label_values(block_tip, host)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "query": "label_values(block_tip, host)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "main",
+          "value": "main"
+        },
+        "datasource": null,
+        "definition": "label_values(block_tip{host=~\"$host\"}, chain)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "chain",
+        "options": [],
+        "query": {
+          "query": "label_values(block_tip{host=~\"$host\"}, chain)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "net",
+  "uid": "VkX8f0N7k",
+  "version": 6
+}

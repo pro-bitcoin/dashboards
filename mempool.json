@@ -1,0 +1,1448 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "datasource": null,
+        "enable": false,
+        "expr": "block_tip{chain=\"$chain\",host=\"$host\",type=\"time\"}*1000",
+        "hide": false,
+        "iconColor": "#cba5aa",
+        "name": "block",
+        "step": "1m",
+        "titleFormat": "block",
+        "useValueForTime": true
+      },
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": false,
+        "hide": false,
+        "iconColor": "semi-dark-red",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 1,
+  "id": 2,
+  "iteration": 1635791867119,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "description": "",
+      "gridPos": {
+        "h": 12,
+        "w": 13,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "content": "# Mempool\n\nThe [Mempool](https://medium.com/coinmonks/bitcoin-mempool-simply-explained-7f76be235e85) is the waiting room for all unconfirmed transactions. \nEvery Full Node on the network has access to the mempool. A Full Node is any node that stores all transactions and blocks of the Bitcoin Blockchain.\n\n---\n\n## CTXMemPool\n\n [CTxMemPool]() stores valid-according-to-the-current-best-chain transactions that may be included in the next block.\n \n Transactions are added when they are seen on the network, but not all transactions seen are added to the pool. For\nexample, the following new transactions will not be added to the mempool:\n\n * a transaction which doesn't meet the minimum fee requirements.\n * a new transaction that double-spends an input of a transaction already in\n * the pool where the new transaction does not meet the Replace-By-Fee\n * requirements as defined in [BIP 125](https://github.com/bitcoin/bips/blob/master/bip-0125.mediawiki).\n * a non-standard transaction.\n \n ---\n\n ### [CTxMemPool::mapTx]() and [CTxMemPoolEntry]() bookkeeping\n \n mapTx is a [boost::multi_index]() that sorts the mempool on 5 criteria:\n\n * transaction hash (txid)\n * witness-transaction hash (wtxid)\n * descendant feerate [we use max(feerate of tx, feerate of tx with all descendants)]\n * time in mempool\n * ancestor feerate [we use min(feerate of tx, feerate of tx with all unconfirmed ancestors)]\n \n Note: the term \"descendant\" refers to in-mempool transactions that depend on this one, while \"ancestor\" refers to in-mempool transactions that a given transaction depends on.\n \n \n Usually when a new transaction is added to the mempool, it has no in-mempool\n children (because any such children would be an orphan).  So in\n addUnchecked(), we:\n \n * update a new entry's setMemPoolParents to include all in-mempool parents\n * update the new entry's direct parents to include the new tx as a child\n * update all ancestors of the transaction to include the new tx's size/fee\n \n  When a transaction is removed from the mempool, we must:\n\n * update all in-mempool parents to not track the tx in setMemPoolChildren\n * update all ancestors to not include the tx's size/fees in descendant state\n * update all in-mempool children to not include it as a parent\n \n These happen in [UpdateForRemoveFromMempool]()",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.1.6",
+      "title": "Mempool",
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 13,
+        "y": 0
+      },
+      "id": 32,
+      "options": {
+        "folderId": 1,
+        "maxItems": 10,
+        "query": "",
+        "showHeadings": false,
+        "showRecentlyViewed": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": []
+      },
+      "pluginVersion": "8.1.6",
+      "title": "Dashboards",
+      "transparent": true,
+      "type": "dashlist"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 13
+      },
+      "id": 37,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "time() - bitcoin_boot_time{chain=\"$chain\", host=\"$host\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Uptime",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "`CTxMemPool` used  memory  percentage of  `maxmempool`",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 0.85
+              },
+              {
+                "color": "red",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 13
+      },
+      "id": 15,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CTxMemPool::DynamicMemoryUsage",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/85553d0563ea098cfc151e51aa473d3901a3afd4/src/txmempool.cpp#950"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "scalar(mempool{chain=\"$chain\", host=\"$host\",mtype=\"gauge\",type=\"usage\"})/scalar(bitcoin_conf{chain=\"$chain\", host=\"$host\",name=\"maxmempool\" })",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Mempool Used",
+      "type": "gauge"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "| field | description | \n| ------ |  ------------------------------- |\n| `max` |  defined in bitcoin.conf  as maxmempool |\n|  `bytes` |  sum size of  transactions | \n| `unconfirmed` |   number of transactions awaiting to be mined |\n| `update` | transactions added/removed/changed |\n| `dynamic mem` |   estimated heap size of mempool |\n| `expire` |  max  time to wait  if not mined |\n| `orphans`|  missing parents |\n| `fees` | total fees in mempool (BTC) |",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "max"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bytes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "usage"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              },
+              {
+                "id": "displayName",
+                "value": "dynamic mem"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "size"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "displayName",
+                "value": "unconfirmed"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "expire"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "orphans"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "updated"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 13,
+        "x": 6,
+        "y": 13
+      },
+      "id": 10,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "MemPoolAccept::AcceptSingleTransaction",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/85553d0563ea098cfc151e51aa473d3901a3afd4/src/validation.cpp#L1022"
+        },
+        {
+          "targetBlank": true,
+          "title": "Orphans",
+          "url": "https://arxiv.org/abs/1912.11541"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "bitcoin_conf{chain=\"$chain\",host=\"$host\", mtype=\"gauge\",name=\"maxmempool\",type=\"bytes\"}",
+          "interval": "",
+          "legendFormat": "max",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "mempool{chain=\"$chain\", host=\"$host\", type!=\"fee\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "bitcoin_conf{chain=\"$chain\",host=\"$host\", mtype=\"gauge\",name=\"mempoolexpiry\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "expire",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "mempool_orphans{chain=\"$chain\", host=\"$host\", type=\"size\", mtype=\"gauge\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "orphans",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "mempool{chain=\"$chain\", host=\"$host\", type=\"fee\"}/100000000",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "E"
+        }
+      ],
+      "title": "Mempool",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Max values since last restart\n\n`total-value` is in BTC",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "max-fees"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "max-items"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total-value"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 11,
+        "x": 0,
+        "y": 18
+      },
+      "id": 35,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "max_over_time(mempool{chain=\"$chain\", host=\"$host\", type=\"usage\"}[24h])",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "max-mem",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(mempool{chain=\"$chain\", host=\"$host\", type=\"fee\"}[24h])/100000000",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "max-fees",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(mempool{chain=\"$chain\", host=\"$host\", type=\"size\"}[24h])",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "max-items",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "max(mempool_changes{chain=\"$chain\",host=\"$host\",type=\"amount\"})/100000000",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "total-value",
+          "refId": "D"
+        }
+      ],
+      "title": "Max Mempool (last 24h)",
+      "type": "stat"
+    },
+    {
+      "datasource": "${datasource}",
+      "description": "| reason | description | \n| ------------ | --------------- | \n|  `conflict`  |  a transaction has been included in a block |\n| `expiry` |   transaction is too older than mempoolexpiry |\n| `reorg` |  TBD | \n| `replaced`  |  RBF |\n| `size-limit`|  mempool has reached maxmempool |\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 11,
+        "y": 18
+      },
+      "id": 11,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "GetMainSignals().TransactionRemovedFromMempool()",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/85553d0563ea098cfc151e51aa473d3901a3afd4/src/txmempool.cpp#L421"
+        },
+        {
+          "targetBlank": true,
+          "title": "MemPoolRemovalReason",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/85553d0563ea098cfc151e51aa473d3901a3afd4/src/txmempool.h#L390"
+        },
+        {
+          "targetBlank": true,
+          "title": "RBF Replace By Fees",
+          "url": "https://bitcoinops.org/en/topics/replace-by-fee/#:~:text=Replace%2DBy%2DFee%20(RBF)%20is%20a%20node%20policy,there%20have%20been%20several%20variations."
+        }
+      ],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "mempool_changes{chain=\"$chain\", host=\"$host\", mtype=\"counter\",type=\"removed\", reason!=\"unknown\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{reason}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Removed",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 24,
+      "panels": [],
+      "title": "Incoming",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 18,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_timer_count{chain=\"$chain\", host=\"$host\"}[5m])",
+          "interval": "",
+          "legendFormat": "incoming",
+          "refId": "A"
+        }
+      ],
+      "title": "Incoming Mempool  Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "µs"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "avg"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 22,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_timer_sum{chain=\"$chain\", host=\"$host\"}[5m])/rate(mempool_timer_count{chain=\"$chain\", host=\"$host\"}[5m])",
+          "interval": "",
+          "legendFormat": "avg",
+          "refId": "A"
+        }
+      ],
+      "title": "Mempool Avg Accept Time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "vout"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"vin\"}[5m])",
+          "interval": "",
+          "legendFormat": "vin",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"vout\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "vout",
+          "refId": "B"
+        }
+      ],
+      "title": "Vin Vout Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 41,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 49
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "increase(mempool_changes{chain=\"main\", host=\"$host\", type=\"amount\"}[60m])/100000000",
+          "interval": "60m",
+          "legendFormat": "btc",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "increase(mempool{chain=\"$chain\", host=\"$host\", type=\"size\"}[60m])",
+          "hide": false,
+          "interval": "60m",
+          "legendFormat": "vin",
+          "refId": "B"
+        }
+      ],
+      "title": "BTC Amount and Vin per hour",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 65
+      },
+      "id": 30,
+      "panels": [],
+      "title": "Mempool over time",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bytes"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 66
+      },
+      "id": 21,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"bytes\"}[5m])",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Incoming Bytes",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unconfirmed"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "super-light-blue",
+                      "value": null
+                    },
+                    {
+                      "color": "semi-dark-yellow",
+                      "value": 1000
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "block"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "min",
+                "value": 1
+              },
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "new block"
+              },
+              {
+                "id": "max",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.1.6",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "mempool{chain=\"$chain\", host=\"$host\", type=\"usage\"}",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "mempool{chain=\"$chain\", host=\"$host\", type=\"size\"}",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "unconfirmed",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "idelta(block_tip{chain=\"$chain\", host=\"$host\", type=\"time\"}[1m])*100",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "block",
+          "refId": "C"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Mempool Usage with Unconfirmed",
+      "transformations": [],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "btc",
+          "value": "btc"
+        },
+        "datasource": "${datasource}",
+        "definition": "label_values(block_tip, host)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "host",
+        "options": [],
+        "query": {
+          "query": "label_values(block_tip, host)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "main",
+          "value": "main"
+        },
+        "datasource": "${datasource}",
+        "definition": "label_values(block_tip{host=~\"$host\"}, chain)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "chain",
+        "options": [],
+        "query": {
+          "query": "label_values(block_tip{host=~\"$host\"}, chain)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "mempool",
+  "uid": "LfZliOHnk",
+  "version": 34
+}
