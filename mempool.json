@@ -33,7 +33,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 2,
-  "iteration": 1635791867119,
+  "iteration": 1636494597462,
   "links": [],
   "panels": [
     {
@@ -678,6 +678,7 @@
     },
     {
       "datasource": null,
+      "description": "Incoming Mempool accepted transactions  and avg time",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -727,90 +728,6 @@
           },
           "unit": "pps"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 0,
-        "y": 24
-      },
-      "id": 18,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "rate(mempool_timer_count{chain=\"$chain\", host=\"$host\"}[5m])",
-          "interval": "",
-          "legendFormat": "incoming",
-          "refId": "A"
-        }
-      ],
-      "title": "Incoming Mempool  Rate",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "µs"
-        },
         "overrides": [
           {
             "matcher": {
@@ -818,6 +735,10 @@
               "options": "avg"
             },
             "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
               {
                 "id": "color",
                 "value": {
@@ -830,12 +751,19 @@
         ]
       },
       "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 12,
+        "h": 12,
+        "w": 24,
+        "x": 0,
         "y": 24
       },
-      "id": 22,
+      "id": 18,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "AcceptToMemoryPoolWithTime",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/validation.cpp#L1112"
+        }
+      ],
       "options": {
         "legend": {
           "calcs": [
@@ -845,19 +773,27 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "multi"
         }
       },
       "targets": [
         {
           "exemplar": true,
+          "expr": "rate(mempool_timer_count{chain=\"$chain\", host=\"$host\"}[5m])",
+          "interval": "",
+          "legendFormat": "incoming",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
           "expr": "rate(mempool_timer_sum{chain=\"$chain\", host=\"$host\"}[5m])/rate(mempool_timer_count{chain=\"$chain\", host=\"$host\"}[5m])",
+          "hide": false,
           "interval": "",
           "legendFormat": "avg",
-          "refId": "A"
+          "refId": "B"
         }
       ],
-      "title": "Mempool Avg Accept Time",
+      "title": "Incoming Mempool  Rate",
       "type": "timeseries"
     },
     {
@@ -927,6 +863,25 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "bytes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "binBps"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -934,7 +889,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 36
       },
       "id": 19,
       "options": {
@@ -946,7 +901,7 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "multi"
         }
       },
       "targets": [
@@ -964,117 +919,18 @@
           "interval": "",
           "legendFormat": "vout",
           "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"bytes\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "C"
         }
       ],
       "title": "Vin Vout Rate",
       "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 41,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 24,
-        "x": 0,
-        "y": 49
-      },
-      "id": 20,
-      "options": {
-        "legend": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "increase(mempool_changes{chain=\"main\", host=\"$host\", type=\"amount\"}[60m])/100000000",
-          "interval": "60m",
-          "legendFormat": "btc",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "increase(mempool{chain=\"$chain\", host=\"$host\", type=\"size\"}[60m])",
-          "hide": false,
-          "interval": "60m",
-          "legendFormat": "vin",
-          "refId": "B"
-        }
-      ],
-      "title": "BTC Amount and Vin per hour",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 65
-      },
-      "id": 30,
-      "panels": [],
-      "title": "Mempool over time",
-      "type": "row"
     },
     {
       "datasource": null,
@@ -1125,39 +981,20 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "bytes"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
           }
-        ]
+        },
+        "overrides": []
       },
       "gridPos": {
-        "h": 16,
+        "h": 12,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 48
       },
-      "id": 21,
+      "id": 39,
       "options": {
         "legend": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": [],
           "displayMode": "list",
           "placement": "bottom"
         },
@@ -1168,17 +1005,18 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"bytes\"}[5m])",
+          "expr": "rate(mempool_changes{chain=\"main\", host=\"$host\", type=\"amount\"}[5m])/100000000",
           "interval": "",
-          "legendFormat": "{{type}}",
+          "legendFormat": "btc",
           "refId": "A"
         }
       ],
-      "title": "Incoming Bytes",
+      "title": "Incoming BTC per second",
       "type": "timeseries"
     },
     {
       "datasource": null,
+      "description": "Mempool memory usages and unconfirmed transactions. Red line is a new block found",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1304,7 +1142,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 82
+        "y": 60
       },
       "id": 28,
       "options": {
@@ -1351,6 +1189,100 @@
       "timeShift": null,
       "title": "Mempool Usage with Unconfirmed",
       "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 41,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 72
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "increase(mempool_changes{chain=\"main\", host=\"$host\", type=\"amount\"}[60m])/100000000",
+          "hide": false,
+          "interval": "60m",
+          "legendFormat": "btc",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "increase(mempool{chain=\"$chain\", host=\"$host\", type=\"size\"}[60m])",
+          "hide": false,
+          "interval": "60m",
+          "legendFormat": "vin",
+          "refId": "B"
+        }
+      ],
+      "title": "BTC Amount and Vin per hour",
       "type": "timeseries"
     }
   ],
@@ -1437,12 +1369,12 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-12h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "mempool",
   "uid": "LfZliOHnk",
-  "version": 34
+  "version": 41
 }

@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 5,
-  "iteration": 1635939564913,
+  "iteration": 1636876003898,
   "links": [],
   "panels": [
     {
@@ -37,7 +37,7 @@
       "id": 2,
       "links": [],
       "options": {
-        "content": "# Connecting Blocks\n\nThe vain of bitcoin. This dashboard represents metrics for connecting blocks.\n\n\n---\n\n## Flow\n\n  A [NetMsgType::BLOCK](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/net_processing.cpp#L3592) message is received from the node and thus begins the process of connecting the new block.\n\n  Class CChainState defined in [validation.cpp](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.h#L545) handles connecting of new blocks.\n\n  Below are the functions being executed:\n\n  * [ConnectTip](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2377)\n      * [ReadBlockFromDisk](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2395)\n      * [ConnectBlock](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L1711)\n          * [Fork Checks](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L1794)\n          * [CheckInputScripts](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L177)\n          * [Update Index](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2014)\n      * Coin view [Flush](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2410)\n      * [FlushStateToDisk](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2434)\n      * [UpdateTip](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2449)\n\n---\n\n## GetMainSignals\n\n  During the life-cycle of a new block, a simple interface class, [CValidationInterface](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validationinterface.h#62), is used to notify those interesed in a new block\n  \n  `UpdatedBlockTip` is called when tip is updated.  This is what the [ZMQ](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/zmq/zmqnotificationinterface.h) uses to send messages. Note, these are blocking calls.\n\n--- \n\n## References\n\n* [Chain](https://developer.bitcoin.org/devguide/block_chain.html)\n* [Blocks](https://developer.bitcoin.org/reference/block_chain.html)\n* [Signature Ops](https://bitcoin.stackexchange.com/questions/67760/how-are-sigops-calculated)\n* [Blockchain Header](https://medium.com/fcats-blockchain-incubator/understanding-the-bitcoin-blockchain-header-a2b0db06b515)\n* [BIP9 in a Nutshell](https://rusty.ozlabs.org/?p=576)\n* [Greg Maxwell: Advances in Block Propagation](https://www.youtube.com/watch?v=EHIuuKCm53o)\n\n---\n\n## Metrics Used\n\n* block_tip\n* block_avg\n* transactions_check_avg\n\n\n",
+        "content": "# Connecting Blocks\n\nThe vain of bitcoin. This dashboard represents metrics for connecting blocks.\n\n\n---\n\n## Flow\n\n  A [NetMsgType::BLOCK](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/net_processing.cpp#L3592) message is received from the node and thus begins the process of connecting the new block.\n\n  Class CChainState defined in [validation.cpp](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.h#L545) handles connecting of new blocks.\n\n  Below are the functions being executed:\n\n  * [ConnectTip](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2377)\n      * [ReadBlockFromDisk](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2395)\n      * [ConnectBlock](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L1711)\n          * [Fork Checks](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L1794)\n          * [CheckInputScripts](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L177)\n          * [Update Index](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2014)\n      * Coin view [Flush](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2410)\n      * [FlushStateToDisk](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2434)\n      * [UpdateTip](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2449)\n\n---\n\n## GetMainSignals\n\n  During the life-cycle of a new block, a simple interface class, [CValidationInterface](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validationinterface.h#62), is used to notify those interesed in a new block\n  \n  `UpdatedBlockTip` is called when tip is updated.  This is what the [ZMQ](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/zmq/zmqnotificationinterface.h) uses to send messages. Note, these are blocking calls.\n\n--- \n\n## References\n\n* [Chain](https://developer.bitcoin.org/devguide/block_chain.html)\n* [Blocks](https://developer.bitcoin.org/reference/block_chain.html)\n* [Signature Ops](https://bitcoin.stackexchange.com/questions/67760/how-are-sigops-calculated)\n* [Blockchain Header](https://medium.com/fcats-blockchain-incubator/understanding-the-bitcoin-blockchain-header-a2b0db06b515)\n* [BIP9 in a Nutshell](https://rusty.ozlabs.org/?p=576)\n* [Greg Maxwell: Advances in Block Propagation](https://www.youtube.com/watch?v=EHIuuKCm53o)\n\n---\n\n\n",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.6",
@@ -49,7 +49,7 @@
       "gridPos": {
         "h": 13,
         "w": 8,
-        "x": 12,
+        "x": 13,
         "y": 0
       },
       "id": 56,
@@ -77,10 +77,9 @@
         "x": 0,
         "y": 19
       },
-      "id": 39,
+      "id": 70,
       "panels": [],
-      "repeat": "chain",
-      "title": "Chain: ${chain}",
+      "title": "Overview Tip",
       "type": "row"
     },
     {
@@ -126,7 +125,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 3,
+        "w": 2,
         "x": 0,
         "y": 20
       },
@@ -263,7 +262,7 @@
       "gridPos": {
         "h": 4,
         "w": 6,
-        "x": 3,
+        "x": 2,
         "y": 20
       },
       "id": 35,
@@ -392,7 +391,7 @@
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 9,
+        "x": 8,
         "y": 20
       },
       "id": 40,
@@ -477,7 +476,7 @@
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 13,
+        "x": 12,
         "y": 20
       },
       "id": 30,
@@ -561,7 +560,7 @@
       "gridPos": {
         "h": 4,
         "w": 5,
-        "x": 17,
+        "x": 16,
         "y": 20
       },
       "id": 29,
@@ -684,137 +683,29 @@
         {
           "exemplar": true,
           "expr": "scalar(block_tip{chain=\"$chain\", type=\"time\", host=\"$host\"}) - scalar(block_tip{chain=\"$chain\", type=\"header-time\", host=\"$host\"})",
+          "format": "time_series",
           "interval": "",
           "legendFormat": "diff",
           "refId": "A"
         }
       ],
       "title": "Diff between block header time & seen (host: $host,  chain: $chain)",
+      "transformations": [],
       "type": "state-timeline"
     },
     {
-      "aliasColors": {
-        "height": "#7EB26D"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${datasource}",
-      "description": "Block Height with transactions\n\nTriggered by UpdatedBlockTip callback in:\n\n",
-      "fill": 0,
-      "fillGradient": 0,
+      "collapsed": false,
+      "datasource": null,
       "gridPos": {
-        "h": 15,
-        "w": 23,
+        "h": 1,
+        "w": 24,
         "x": 0,
         "y": 31
       },
-      "hiddenSeries": false,
-      "id": 20,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [
-        {
-          "targetBlank": true,
-          "title": "CValidationInterface",
-          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/validationinterface.h#L76"
-        }
-      ],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": false
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.6",
-      "pointradius": 1,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "$$hashKey": "object:402",
-          "alias": "btc",
-          "fillGradient": 0,
-          "points": true,
-          "yaxis": 2
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "block_tip{host=\"$host\", type=\"valueout\", chain=\"$chain\"}/100000000",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "btc",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"transactions\"} > 0",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{type}}",
-          "refId": "B"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "BTC/Transactions (host: $host,  chain: $chain)",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:374",
-          "format": "none",
-          "label": "transactions",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:375",
-          "format": "none",
-          "label": "btc",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "id": 68,
+      "panels": [],
+      "title": "Connect Block Timers",
+      "type": "row"
     },
     {
       "datasource": null,
@@ -833,13 +724,86 @@
           "mappings": [],
           "unit": "µs"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tx-check"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "code",
+                    "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L1923"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "update-tip"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "code",
+                    "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2456"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "update-index"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "code",
+                    "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2007"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "flush-view"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "code",
+                    "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/validation.cpp#L2419"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
         "w": 7,
         "x": 0,
-        "y": 46
+        "y": 32
       },
       "id": 58,
       "options": {
@@ -918,7 +882,7 @@
         "h": 12,
         "w": 17,
         "x": 7,
-        "y": 46
+        "y": 32
       },
       "hiddenSeries": false,
       "id": 33,
@@ -1067,7 +1031,7 @@
         "h": 11,
         "w": 23,
         "x": 0,
-        "y": 58
+        "y": 44
       },
       "hiddenSeries": false,
       "id": 22,
@@ -1190,57 +1154,117 @@
       }
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
       "datasource": "${datasource}",
       "description": "\n\nMost of the time is spent checking the transactions\n\n",
-      "fill": 0,
-      "fillGradient": 0,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "points",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tx-check"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.barAlignment",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "transactions"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "points"
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 12
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
-        "h": 16,
+        "h": 12,
         "w": 23,
         "x": 0,
-        "y": 69
+        "y": 55
       },
-      "hiddenSeries": false,
       "id": 54,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": true,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sort": "current",
-        "sortDesc": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
       "options": {
-        "alertThreshold": false
-      },
-      "percentage": false,
-      "pluginVersion": "8.1.6",
-      "pointradius": 2,
-      "points": true,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "$$hashKey": "object:513",
-          "alias": "tx-check",
-          "yaxis": 2
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "single"
         }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      },
+      "pluginVersion": "8.1.6",
       "targets": [
         {
           "exemplar": true,
@@ -1259,48 +1283,507 @@
           "refId": "G"
         }
       ],
-      "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
       "title": "Number of transaction with tx-check time  (host: $host,  chain: $chain)",
-      "tooltip": {
-        "shared": true,
-        "sort": 1,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
+      "transformations": [
         {
-          "$$hashKey": "object:199",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:200",
-          "format": "µs",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Time": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "transactions": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "tx-check": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
         }
       ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 67
+      },
+      "id": 39,
+      "panels": [],
+      "title": "Block Stats: ${chain}",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "description": "Number of block transactions. Click on the blue dot to see in a block explorer",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "transactions"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "auto"
+              },
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.barAlignment",
+                "value": 0
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.gradientMode",
+                "value": "none"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 100
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "height"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "points"
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 14
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Block Explorer",
+                    "url": "https://main.pro-bitcoin.io/block-height/${__value.text}"
+                  }
+                ]
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "log": 10,
+                  "type": "log"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 23,
+        "x": 0,
+        "y": 68
+      },
+      "id": 66,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"transactions\"}",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"height\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Block Transactions",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Time": {
+                "aggregations": [
+                  "firstNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "Value": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "height": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "transactions": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The value in the block in BTC.  Click on the blue dot to see in a block explorer",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "valueout"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "auto"
+              },
+              {
+                "id": "custom.drawStyle",
+                "value": "bars"
+              },
+              {
+                "id": "custom.barAlignment",
+                "value": 0
+              },
+              {
+                "id": "custom.showPoints",
+                "value": "never"
+              },
+              {
+                "id": "custom.gradientMode",
+                "value": "none"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 100
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "height"
+            },
+            "properties": [
+              {
+                "id": "custom.drawStyle",
+                "value": "points"
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 14
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Block Explorer",
+                    "url": "https://main.pro-bitcoin.io/block-height/${__value.text}"
+                  }
+                ]
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "log": 10,
+                  "type": "log"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "transactions"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 23,
+        "x": 0,
+        "y": 78
+      },
+      "id": 71,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "nValueOut",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/validation.cpp#L2036"
+        }
+      ],
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"valueout\"}/100000000",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"height\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "block_tip{chain=\"$chain\", host=\"$host\", type=\"transactions\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "transactions",
+          "refId": "C"
+        }
+      ],
+      "title": "Block BTC moment/transactions",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Time": {
+                "aggregations": [
+                  "firstNotNull"
+                ],
+                "operation": "aggregate"
+              },
+              "Value": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "height": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "valueout": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -1357,7 +1840,7 @@
         "h": 12,
         "w": 23,
         "x": 0,
-        "y": 85
+        "y": 90
       },
       "id": 24,
       "links": [
@@ -1365,6 +1848,11 @@
           "targetBlank": true,
           "title": "StackExchange",
           "url": "https://bitcoin.stackexchange.com/questions/67760/how-are-sigops-calculated"
+        },
+        {
+          "targetBlank": true,
+          "title": "nSigOpsCost",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/validation.cpp#L2025"
         }
       ],
       "options": {
@@ -1445,7 +1933,7 @@
         "h": 11,
         "w": 23,
         "x": 0,
-        "y": 97
+        "y": 102
       },
       "id": 25,
       "links": [],
@@ -1482,7 +1970,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5m",
+  "refresh": false,
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -1573,5 +2061,5 @@
   "timezone": "",
   "title": "blocks",
   "uid": "qtQCmdN7z",
-  "version": 34
+  "version": 96
 }

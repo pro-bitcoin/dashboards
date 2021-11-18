@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1634759995359,
+  "iteration": 1636219333578,
   "links": [],
   "panels": [
     {
@@ -42,7 +42,7 @@
         }
       ],
       "options": {
-        "content": "Coming soon",
+        "content": "## [Peer Discovery](https://developer.bitcoin.org/devguide/p2p_network.html#peer-discovery)\n\nWhen started for the first time, programs don’t know the IP addresses of any active full nodes. In order to discover some IP addresses, they query one or more DNS names (called [DNS seeds](https://developer.bitcoin.org/glossary.html#term-DNS-seed)) hardcoded into Bitcoin Core and BitcoinJ.\n",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.6",
@@ -74,7 +74,7 @@
       "type": "dashlist"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -165,5 +165,5 @@
   "timezone": "",
   "title": "peers",
   "uid": "cBQjQAH7z",
-  "version": 4
+  "version": 5
 }

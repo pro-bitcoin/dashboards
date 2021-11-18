@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 6,
-  "iteration": 1634246082300,
+  "iteration": 1636363838753,
   "links": [],
   "panels": [
     {
@@ -42,7 +42,7 @@
         }
       ],
       "options": {
-        "content": "# Net Metrics\n\n## [Peer Discovery](https://developer.bitcoin.org/devguide/p2p_network.html#peer-discovery)\n\nWhen started for the first time, programs don’t know the IP addresses of any active full nodes. In order to discover some IP addresses, they query one or more DNS names (called [DNS seeds](https://developer.bitcoin.org/glossary.html#term-DNS-seed)) hardcoded into Bitcoin Core and BitcoinJ.\n\n---\n## Protocols Supported\n\n  * Ipv4\n  * Ipv6\n  * [Tor](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/tor.md)\n  * [I2P](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/i2p.md)\n\n---\n\n## Service Connection Types\n  * [SPV](https://btcinformation.org/en/developer-guide#simplified-payment-verification-spv) - Thin Client\n  * [FULL](https://btcinformation.org/en/developer-guide#full-node)\n\n---\n## CConman\n  Class [CConnman](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/net.h) handles all connections and coordinates messages to/from other nodes, which is named [CNode](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.h#L396)\n  \n   CConnman has multiple threads handling various tasks\n           \n  * ThreadOpenAddedConnections\n  * ThreadMessageHandler\n  * ThreadI2PAcceptIncoming\n  * ThreadDNSAddressSeed\n  * ThreadSocketHandler\n\n  [CConnman::SocketHandler](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#1634) handles low level sockets operations (sending/recv) from the CNodes\n\n  CConnman is initialized in [src/init.cpp](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/init.cpp#L1185)\n\n  ---\n",
+        "content": "# Net Metrics\n\n## Protocols Supported\n\n  * Ipv4\n  * Ipv6\n  * [Tor](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/tor.md)\n  * [I2P](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/doc/i2p.md)\n\n---\n\n## Service Connection Types\n  * [SPV](https://btcinformation.org/en/developer-guide#simplified-payment-verification-spv) - Thin Client\n  * [FULL](https://btcinformation.org/en/developer-guide#full-node)\n\n---\n## CConman\n  Class [CConnman](https://github.com/pro-bitcoin/pro-bitcoin/blob/prometheus/src/net.h) handles all connections and coordinates messages to/from other nodes, which is named [CNode](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.h#L396)\n  \n   CConnman has multiple threads handling various tasks\n           \n  * ThreadOpenAddedConnections\n  * ThreadMessageHandler\n  * ThreadI2PAcceptIncoming\n  * ThreadDNSAddressSeed\n  * ThreadSocketHandler\n\n  [CConnman::SocketHandler](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#1634) handles low level sockets operations (sending/recv) from the CNodes\n\n  CConnman is initialized in [src/init.cpp](https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/init.cpp#L1185)\n\n  ---\n",
         "mode": "markdown"
       },
       "pluginVersion": "8.1.6",
@@ -982,7 +982,7 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "multi"
         }
       },
       "targets": [
@@ -1000,14 +1000,6 @@
           "interval": "",
           "legendFormat": "{{direction}}",
           "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "idelta(block_tip{chain=\"$chain\", host=\"$host\", type=\"time\"}[1m]) % 600",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "block",
-          "refId": "C"
         }
       ],
       "title": "Bandwidth Rate",
@@ -1022,6 +1014,13 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "net.cpp",
+              "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/net.cpp#L3002"
+            }
+          ],
           "unit": "bytes"
         },
         "overrides": []
@@ -1047,6 +1046,18 @@
       },
       "lines": false,
       "linewidth": 1,
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "CConnman::RecordBytesRecv",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/net.cpp#L3003"
+        },
+        {
+          "targetBlank": true,
+          "title": "CConnman::RecordBytesSent",
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/net.cpp#L3011"
+        }
+      ],
       "nullPointMode": "null as zero",
       "options": {
         "alertThreshold": true
@@ -1144,6 +1155,13 @@
             }
           },
           "decimals": 2,
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "net.cpp",
+              "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/051d938566be6f380e10f763c2ce1d5cb059f633/src/net.cpp#L3145"
+            }
+          ],
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1167,7 +1185,7 @@
         {
           "targetBlank": true,
           "title": "CConnman::PushMessage",
-          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3165"
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L3170"
         }
       ],
       "options": {
@@ -1220,6 +1238,13 @@
             }
           },
           "decimals": 2,
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "net.cpp",
+              "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L630"
+            }
+          ],
           "mappings": [],
           "max": 100,
           "min": 0,
@@ -1238,7 +1263,7 @@
         {
           "targetBlank": true,
           "title": "CNode::ReceiveMsgByte",
-          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#L530"
+          "url": "https://github.com/pro-bitcoin/pro-bitcoin/blob/5335e6aebb466e80850a3a99a3325bccea6e92a8/src/net.cpp#630"
         }
       ],
       "options": {
@@ -1570,5 +1595,5 @@
   "timezone": "",
   "title": "net",
   "uid": "VkX8f0N7k",
-  "version": 6
+  "version": 12
 }
